@@ -40,6 +40,12 @@ button:active { transform:scale(0.95); opacity:0.7;}
 
 <div class="result" id="result">0 元</div>
 <div class="small" id="summary"></div>
+<div class="result" id="totalHours">總時數：0 小時</div>
+<div class="result" id="totalMoney">總金額：0 元</div>
+
+<button onclick="resetAll()" style="background:#800;">
+  初始化（全部歸0）
+</button>
 
 <script>
 
@@ -125,7 +131,23 @@ function calc(){
 
   saveLog(total);
 }
+let t = getTotals();
+t.hours += hours;
+t.money += total;
+saveTotals(t.hours, t.money);
+updateTotalsUI();
+}  
+function resetAll(){
+  if(confirm("確定要全部歸0嗎？")){
+    localStorage.removeItem("totals");
+    localStorage.removeItem("logs");
 
+    updateTotalsUI();
+    updateMonthly();
+
+    document.getElementById("result").innerText = "0 元";
+  }
+}  
 // 儲存紀錄
 function saveLog(total){
   let logs = JSON.parse(localStorage.getItem("logs") || "[]");
@@ -154,6 +176,26 @@ function updateMonthly(){
     "本月加班總額：" + sum.toFixed(0) + " 元";
 }
 
+  function getTotals(){
+  return JSON.parse(localStorage.getItem("totals") || '{"hours":0,"money":0}');
+}
+
+function saveTotals(hours, money){
+  localStorage.setItem("totals", JSON.stringify({hours, money}));
+}
+
+// 更新畫面
+function updateTotalsUI(){
+  let t = getTotals();
+  document.getElementById("totalHours").innerText =
+    "總時數：" + t.hours.toFixed(1) + " 小時";
+
+  document.getElementById("totalMoney").innerText =
+    "總金額：" + t.money.toFixed(0) + " 元";
+}
+updateTotalsUI();
+document.getElementById("totalHours").innerText = "總時數：0 小時";
+document.getElementById("totalMoney").innerText = "總金額：0 元";
 </script>
 
 </body>
