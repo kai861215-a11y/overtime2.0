@@ -130,13 +130,13 @@ function calc(){
     total.toFixed(0) + " 元";
 
   saveLog(total);
-}
-let t = getTotals();
-t.hours += hours;
-t.money += total;
-saveTotals(t.hours, t.money);
-updateTotalsUI();
-}  
+
+  let t = getTotals();
+  t.hours += hours;
+  t.money += total;
+  saveTotals(t.hours, t.money);
+  updateTotalsUI();
+ }  
 function resetAll(){
   if(confirm("確定要全部歸0嗎？")){
     localStorage.removeItem("totals");
